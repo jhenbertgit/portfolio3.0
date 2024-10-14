@@ -1,7 +1,5 @@
 import type { LayoutServerLoad } from './$types';
 
-export const ssr = false;
-
 export const load = (async ({ url }) => {
 	const { pathname } = url;
 
