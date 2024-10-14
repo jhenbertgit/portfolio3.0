@@ -8,6 +8,12 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	type MetaDefault = { title: string; description: string; image: string };
+
+	type Meta = MetaDefault & {
+		twitter: MetaDefault;
+	};
 }
 
 export {};

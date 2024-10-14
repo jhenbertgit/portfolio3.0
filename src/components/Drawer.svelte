@@ -4,12 +4,12 @@
 	import { goto } from '$app/navigation';
 	import { Theme } from '.';
 
-	function onClick(url: string) {
-		isDrawerOpen.update((value) => false);
+	const onClick = (url: string) => {
+		isDrawerOpen.update((value) => !value);
 		setTimeout(() => {
 			goto(url);
 		}, 1000);
-	}
+	};
 </script>
 
 {#if $isDrawerOpen}

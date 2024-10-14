@@ -3,8 +3,7 @@
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { isDarkMode } from '$lib/store';
-	import arrowDark from '$lib/img/arrow-dark.svg';
-	import arrowLight from '$lib/img/arrow-light.svg';
+	import { arrowDark, arrowLight } from '$lib/img';
 	import {
 		heading,
 		subheading,
@@ -23,7 +22,7 @@
 
 <svelte:head>
 	<title>{name} | About</title>
-	<meta name="description" content="About {name}" />
+	<meta name="description" content={`All about ${name}`} />
 </svelte:head>
 
 <div class="w-full h-full flex flex-col">

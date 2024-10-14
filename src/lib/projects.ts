@@ -36,7 +36,7 @@ let allImages: Image[] = [];
 let allProjects: Project[] = [];
 let allTags: Set<string> = new Set<string>();
 
-async function importAllProjectFiles() {
+const importAllProjectFiles = async () => {
 	// Using import.meta.glob to dynamically import all project files
 	const imports = import.meta.glob('/.data/projects/**/project.*');
 	const files = Object.entries(imports);
@@ -84,7 +84,7 @@ async function importAllProjectFiles() {
 			}
 		})
 	);
-}
+};
 
 // After importing all project files, assign images to the projects and sort them
 allProjects.forEach((project) => {

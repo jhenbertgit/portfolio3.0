@@ -15,9 +15,9 @@
 		}, 1250);
 	});
 
-	function toggleDrawer() {
+	const toggleDrawer = () => {
 		isDrawerOpen.update((value) => !value);
-	}
+	};
 </script>
 
 {#if mounted}

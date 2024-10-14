@@ -1,11 +1,11 @@
 <script lang="ts">
+	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { name } from '../../.data/site';
 	import { fly, slide, scale } from 'svelte/transition';
 	import { isDarkMode } from '$lib/store';
 	import { quadInOut } from 'svelte/easing';
-	import { Theme } from '../components';
-
+	import { Metadata, Theme } from '../components';
 	import {
 		avatar,
 		fullname,
@@ -16,6 +16,9 @@
 		buttonRight,
 		showRepository
 	} from '../../.data/home';
+	import { page } from '$app/stores';
+
+	export let data: PageData;
 
 	let mounted = false;
 	onMount(() => {
@@ -23,12 +26,15 @@
 			mounted = true;
 		}, 750);
 	});
+	let meta: Meta;
+
+	page.subscribe(($page) => {
+		meta = $page.data.meta; //Restore Page Defaults
+	});
 </script>
 
-<svelte:head>
-	<title>{name} | Home</title>
-	<meta name="description" content="The portfolio website of {name}" />
-</svelte:head>
+<!--SEO metadata-->
+<Metadata {meta} pathname={data.pathname} />
 
 <div id="home" class="w-full h-full flex flex-col items-center justify-center">
 	<div class="fixed z-10 right-0 bottom-0 mr-5 mb-5">

@@ -5,39 +5,50 @@
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 
-	import emailDark from '$lib/img/email-dark.svg';
-	import emailLight from '$lib/img/email-light.svg';
+	import { emailDark, emailLight } from '$lib/img';
 
 	let mounted = false;
+
 	onMount(() => {
 		mounted = true;
 	});
 
+	const initializeForm = () => {
+		return {
+			name: { value: '', valid: false, error: false },
+			email: { value: '', valid: false, error: false },
+			subject: { value: '', valid: false, error: false },
+			message: { value: '', valid: false, error: false },
+			valid: false,
+			error: false
+		};
+	};
 	let form = initializeForm();
+
 	let isSubmitting = false;
 	let isSuccessful = false;
 	let isServerError = false;
 	let serverMessage = '';
 
-	function onTextAreaInput() {
+	const onTextAreaInput = () => {
 		const textArea = document.getElementById('message');
 		if (textArea) {
 			textArea.style.height = 'auto';
 			textArea.style.height = textArea.scrollHeight + 2 + 'px';
 			onInput();
 		}
-	}
+	};
 
-	function onInput() {
+	const onInput = () => {
 		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		form.email.valid = regex.test(form.email.value);
 		form.name.valid = form.name.value.length > 0;
 		form.subject.valid = form.subject.value.length > 0;
 		form.message.valid = form.message.value.length > 0;
 		updateForm();
-	}
+	};
 
-	function onSubmit(e: Event) {
+	const onSubmit = (e: Event) => {
 		e.preventDefault();
 		isSuccessful = false;
 		isServerError = false;
@@ -47,33 +58,22 @@
 		form.message.error = !form.message.valid;
 		updateForm();
 		submitForm();
-	}
+	};
 
-	function initializeForm() {
-		return {
-			name: { value: '', valid: false, error: false },
-			email: { value: '', valid: false, error: false },
-			subject: { value: '', valid: false, error: false },
-			message: { value: '', valid: false, error: false },
-			valid: false,
-			error: false
-		};
-	}
-
-	function updateForm() {
+	const updateForm = () => {
 		form.valid = form.name.valid && form.email.valid && form.subject.valid && form.message.valid;
 		form.error = form.name.error || form.email.error || form.subject.error || form.message.error;
-	}
+	};
 
-	function resetTextArea() {
+	const resetTextArea = () => {
 		const textArea = document.getElementById('message');
 		if (textArea) {
 			textArea.style.height = 'auto';
 			textArea.style.height = textArea.scrollHeight + 2 + 'px';
 		}
-	}
+	};
 
-	async function submitForm() {
+	const submitForm = async () => {
 		if (form.valid) {
 			isSubmitting = true;
 
@@ -103,12 +103,12 @@
 
 			isSubmitting = false;
 		}
-	}
+	};
 </script>
 
 <svelte:head>
 	<title>{name} | Contact</title>
-	<meta name="description" content="How to contact {name}" />
+	<meta name="description" content={`Contact or connect with ${name}`} />
 </svelte:head>
 
 <div class="w-full h-full flex flex-col">

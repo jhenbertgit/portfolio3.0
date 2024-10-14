@@ -18,7 +18,7 @@
 
 	let filters: Set<string> = new Set<string>();
 
-	function onFilterClicked(tag: string) {
+	const onFilterClicked = (tag: string) => {
 		if (filters.has(tag)) {
 			filters.delete(tag);
 		} else {
@@ -28,12 +28,12 @@
 		projects = data.projects.filter((project) => {
 			return [...filters].every((tag) => project.tags.includes(tag));
 		});
-	}
+	};
 </script>
 
 <svelte:head>
 	<title>{name} | Projects</title>
-	<meta name="description" content="{name}'s Projects" />
+	<meta name="description" content={`${name}'s personal projects`} />
 </svelte:head>
 
 <div class="w-full h-full flex flex-col">

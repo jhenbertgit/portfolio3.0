@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { LayoutData } from './$types';
+	import { page } from '$app/stores';
 	import '@fontsource/inter';
 	import '@fontsource/inter/600.css';
 	import '@fontsource/fira-mono';
@@ -12,7 +13,7 @@
 	import { beforeNavigate } from '$app/navigation';
 	import { isScrolled } from '$lib/store';
 	import { circInOut } from 'svelte/easing';
-	import { Header, Footer, Drawer } from '../components';
+	import { Header, Footer, Drawer, Metadata } from '../components';
 
 	export let data: LayoutData;
 
@@ -34,21 +35,21 @@
 		if (!to || !to.route.id) return;
 		if (!from || !from.route.id) return;
 		if (to.route.id === from.route.id) return;
-		const tidx = order.indexOf(to.route.id);
-		const fidx = order.indexOf(from.route.id);
-		direction = tidx < fidx ? -1 : 1;
+		const toIndex = order.indexOf(to.route.id);
+		const fromIndex = order.indexOf(from.route.id);
+		direction = toIndex < fromIndex ? -1 : 1;
 	});
 
-	function slideIn(node: HTMLElement) {
+	const slideIn = (node: HTMLElement) => {
 		return {
 			easing,
 			duration,
 			css: (t: number, u: number) => `
                 transform: translateX(${u * direction * 100}%)`
 		};
-	}
+	};
 
-	function foldOut(node: HTMLElement) {
+	const foldOut = (node: HTMLElement) => {
 		const opacity: number = Number(getComputedStyle(node).opacity);
 		return {
 			easing,
@@ -58,15 +59,15 @@
                 transform: translateX(${u * -(direction * 100)}%) rotateY(${u * -(direction * 90)}deg);
                 transform-origin: ${direction < 0 ? 'left center' : 'right center'};`
 		};
-	}
+	};
 
-	function onPageScroll() {
+	const onPageScroll = () => {
 		if (!browser) return;
 		const page = document.getElementById('page');
 		if (page) {
 			isScrolled.update((value) => page.scrollTop > 0);
 		}
-	}
+	};
 </script>
 
 <div id="app" class="fixed top-0 left-0 bottom-0 right-0 bg-zinc-800">

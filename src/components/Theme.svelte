@@ -14,7 +14,7 @@
 		}
 	});
 
-	function setTheme(theme: string) {
+	const setTheme = (theme: string) => {
 		if (browser && theme !== localStorage.theme) {
 			localStorage.theme = theme;
 			currentTheme.update((value) => theme);
@@ -24,7 +24,7 @@
 					(theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 			);
 		}
-	}
+	};
 
 	isDarkMode.subscribe((isDarkMode) => {
 		if (browser) {

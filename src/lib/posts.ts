@@ -21,7 +21,7 @@ interface MarkdownFile {
 let allPosts: Post[] = [];
 let allTags: Set<string> = new Set<string>();
 
-async function importAllPostFiles() {
+const importAllPostFiles = async () => {
 	const imports = import.meta.glob('/.data/posts/**/post.md');
 	const files = Object.entries(imports);
 
@@ -45,7 +45,7 @@ async function importAllPostFiles() {
 			allPosts = [...allPosts, post];
 		})
 	);
-}
+};
 
 await importAllPostFiles();
 
