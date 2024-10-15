@@ -1,6 +1,6 @@
 ---
 title: ByteMinds PH Website
-description: A modern full-stack application to track your daily expenses.
+description: A platform for tutors and freelancers.
 date: 03/01/2024
 tags: [Svelte, SvelteKit, TypeScript, Skeleton UI, Prisma ORM]
 liveURL: https://bytemindsph.com
