@@ -1,5 +1,4 @@
 import { basename, dirname } from 'path';
-
 interface Post {
 	slug: string;
 	body: string;

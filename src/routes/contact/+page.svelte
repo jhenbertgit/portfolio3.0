@@ -4,7 +4,6 @@
 	import { isDarkMode } from '$lib/store';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-
 	import { emailDark, emailLight } from '$lib/img';
 
 	let mounted = false;

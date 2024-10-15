@@ -1,6 +1,5 @@
 // import test from "node:test";
 import { basename, dirname } from 'path';
-
 interface Project {
 	slug: string;
 	body: string;
@@ -45,6 +44,7 @@ const importAllProjectFiles = async () => {
 	await Promise.all(
 		files.map(async ([filepath, module]) => {
 			const ext = filepath.split('.').pop(); // Get file extension
+
 			const slug = basename(dirname(filepath)); // Use the directory name as the project slug
 
 			// Handle markdown files

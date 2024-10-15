@@ -4,7 +4,7 @@
 	import { fly, slide, scale } from 'svelte/transition';
 	import { isDarkMode } from '$lib/store';
 	import { quadInOut } from 'svelte/easing';
-	import { Metadata, Theme } from '../components';
+	import { Metadata, Theme } from '$lib/components';
 	import {
 		avatar,
 		fullname,

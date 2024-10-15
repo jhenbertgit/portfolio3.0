@@ -12,7 +12,7 @@
 	import { beforeNavigate } from '$app/navigation';
 	import { isScrolled } from '$lib/store';
 	import { circInOut } from 'svelte/easing';
-	import { Header, Footer, Drawer, Metadata } from '../components';
+	import { Header, Footer, Drawer } from '$lib/components';
 
 	export let data: LayoutData;
 

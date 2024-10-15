@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { name, brand } from '../../.data/site';
+	import { name, brand } from '../../../.data/site';
 	import { fly } from 'svelte/transition';
 	import { isDrawerOpen, isScrolled } from '$lib/store';
 	import { onMount } from 'svelte';

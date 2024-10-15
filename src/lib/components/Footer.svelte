@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { name, brand } from '../../.data/site';
+	import { name, brand } from '../../../.data/site';
 	import { isDarkMode } from '$lib/store';
 	import { Theme } from '.';
 </script>
