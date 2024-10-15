@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
-	import { name } from '../../.data/site';
 	import { fly, slide, scale } from 'svelte/transition';
 	import { isDarkMode } from '$lib/store';
 	import { quadInOut } from 'svelte/easing';
