@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { LayoutData } from './$types';
-	import { page } from '$app/stores';
 	import '@fontsource/inter';
 	import '@fontsource/inter/600.css';
 	import '@fontsource/fira-mono';
