@@ -3,9 +3,10 @@ import { GOOGLE_APPSCRIPT_URL } from '$env/static/private';
 export async function POST({ request }) {
 	const requestBody = await request.json();
 
-	//payload from front-end
+	// Payload from front-end
 	const { name, email, subject, message } = requestBody;
 
+	// Data structure allowed in Google Sheets
 	const payload = [
 		{
 			name,
@@ -15,7 +16,7 @@ export async function POST({ request }) {
 		}
 	];
 
-	// Send payload to Google Sheet
+	// Send payload to Google Sheets
 	try {
 		const response = await fetch(GOOGLE_APPSCRIPT_URL, {
 			method: 'POST',
