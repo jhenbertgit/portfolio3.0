@@ -124,8 +124,6 @@ _[Example.com](http://www.example.com)_
 
 #### Images
 
-`<br/>`
-
 Relative:
 
 ```markdown
@@ -172,7 +170,7 @@ function greet() {
 
 ```javascript
 function greet() {
-  console.log("Hello, Markdown!");
+	console.log('Hello, Markdown!');
 }
 ```
 
@@ -197,3 +195,7 @@ the basic syntax in more depth, or check out the more extended syntax.
 <https://en.wikipedia.org/wiki/Markdown>
 
 <https://www.markdownguide.org/>
+
+**Disclaimer:**
+
+This topic is an original post by [mark-horn/devfolio](https://github.com/mark-horn/devfolio)

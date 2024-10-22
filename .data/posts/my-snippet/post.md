@@ -8,37 +8,37 @@ tags: [Collection, Svelte component]
 ## Lazy component in Svelte
 
 ```svelte
-<LazyComponent/>
+<LazyComponent />
 ```
 
 ```svelte
 <script lang="ts">
-  import viewport from "@jhenbert/viewport-action";
+ import viewport from '@jhenbert/viewport-action';
 
-  let loadComponent;
-  export { loadComponent as this };
+ let loadComponent;
+ export { loadComponent as this };
 
-  export let threshold: number = 0;
+ export let threshold: number = 0;
 
-  let isShowingComponent = false;
-  let componentPromise: Promise<{
-    default: ConstructorOfATypedSvelteComponent;
-  }>;
+ let isShowingComponent = false;
+ let componentPromise: Promise<{
+  default: ConstructorOfATypedSvelteComponent;
+ }>;
 
-  const handleEnterViewport = () => {
-    componentPromise = loadComponent();
-    isShowingComponent = true;
-  };
+ const handleEnterViewport = () => {
+  componentPromise = loadComponent();
+  isShowingComponent = true;
+ };
 </script>
 
 {#if !isShowingComponent}
-  <div use:viewport={threshold} on:enterViewport={handleEnterViewport} />
+ <div use:viewport={threshold} on:enterViewport={handleEnterViewport} />
 {:else}
-  {#await componentPromise}
-    <slot name="fallback">Loading...</slot>
-  {:then { default: Component }}
-    <slot name="component" {Component} />
-  {/await}
+ {#await componentPromise}
+  <slot name="fallback">Loading...</slot>
+ {:then { default: Component }}
+  <slot name="component" {Component} />
+ {/await}
 {/if}
 ```
 
@@ -54,27 +54,23 @@ npx jsr add @jhenbert/viewport-action
 
 ```svelte
 <!--Lazy loading component via dynamic import-->
-<Lazy this={() => import("$lib/components/CallToAction.svelte")} threshold={100}
-  ><div slot="fallback">loading component...</div>
+<LazyComponent this={() => import('$lib/components/CallToAction.svelte')} threshold={100}
+ ><div slot="fallback">loading component...</div>
 
-  <svelte:fragment slot="component" let:Component
-    ><Component />
-  </svelte:fragment>
-</Lazy>
+ <svelte:fragment slot="component" let:Component><Component /></svelte:fragment>
+</LazyComponent>
 ```
 
 - Component with props
 
 ```svelte
-<Lazy
-  this={() => import("$lib/components/CommunityFeedback.svelte")}
-  threshold={100}
-  ><div slot="fallback">loading component...</div>
+<LazyComponent this={() => import('$lib/components/CommunityFeedback.svelte')} threshold={100}
+ ><div slot="fallback">loading component...</div>
 
-  <svelte:fragment slot="component" let:Component
-    ><Component data={data.communityFeedback} />
-  </svelte:fragment>
-</Lazy>
+ <svelte:fragment slot="component" let:Component
+  ><Component data={data.communityFeedback} />
+ </svelte:fragment>
+</LazyComponent>
 ```
 
 Put this in your `app.d.ts`
