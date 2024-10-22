@@ -1,29 +1,10 @@
 // import test from "node:test";
 import { basename, dirname } from 'path';
-interface Project {
-	slug: string;
-	body: string;
-	date: string;
-	tags: string[];
-	image: string;
-	title: string;
-	liveURL: string;
-	githubURL: string;
-	description: string;
-}
+import { processProjectMarkdownFile } from '$lib';
 
 interface Image {
 	slug: string;
 	path: string;
-}
-
-interface MarkdownFile {
-	metadata: object;
-	default: {
-		render(): {
-			html: string;
-		};
-	};
 }
 
 interface ImageFile {
@@ -31,101 +12,67 @@ interface ImageFile {
 }
 
 const supportedImages = ['jpeg', 'jpg', 'png', 'gif'];
+const allTags: Set<string> = new Set<string>();
+
 let allImages: Image[] = [];
 let allProjects: Project[] = [];
-let allTags: Set<string> = new Set<string>();
 
+// Function to import all project files dynamically
 const importAllProjectFiles = async () => {
-	// Using import.meta.glob to dynamically import all project files
 	const imports = import.meta.glob('/.data/projects/**/project.*');
 	const files = Object.entries(imports);
 
-	// Use Promise.all to process all files in parallel
+	// Temporary arrays for projects and images
+	const projectList: Project[] = [];
+	const imageList: Image[] = [];
+
 	await Promise.all(
 		files.map(async ([filepath, module]) => {
-			const ext = filepath.split('.').pop(); // Get file extension
-
+			const ext = filepath.split('.').pop() || ''; // Fallback to empty string if no extension
 			const slug = basename(dirname(filepath)); // Use the directory name as the project slug
 
 			// Handle markdown files
 			if (ext === 'md') {
-				const file = (await module()) as MarkdownFile;
-
-				// Check if the module export has metadata and call the default function for the body
-				if (typeof file === 'object' && 'metadata' in file && slug) {
-					const metadata = file.metadata;
-					const body = file.default.render().html;
-
-					const project = {
-						slug,
-						body,
-						...metadata // Spread metadata to include it in the project object
-					} as Project;
-
-					// Ensure tags is an array, even if undefined
-					if (!project.tags) project.tags = [];
-
-					// Add project to the allProjects array
-					allProjects = [...allProjects, project];
-				}
+				const project = await processProjectMarkdownFile(filepath, module);
+				projectList.push(project);
 			}
-			// Handle supported image files
-			else if (ext && supportedImages.includes(ext)) {
+			// Handle image files
+			else if (supportedImages.includes(ext)) {
 				const file = (await module()) as ImageFile;
-				const path = file.default; // Get the image path
-
-				const image = {
+				imageList.push({
 					slug,
-					path
-				};
-
-				// Add image to the allImages array
-				allImages = [...allImages, image];
+					path: file.default
+				});
 			}
 		})
 	);
+
+	// Update global arrays
+	allProjects = [...allProjects, ...projectList];
+	allImages = [...allImages, ...imageList];
 };
 
-// After importing all project files, assign images to the projects and sort them
-allProjects.forEach((project) => {
-	const image = allImages.find((image) => image.slug === project.slug); // Find the corresponding image
-	if (image) project.image = image.path;
-
-	// Add tags to the allTags set
-	for (const tag of project.tags) {
-		allTags.add(tag);
-	}
-
-	// Format the date for each project
-	project.date = new Date(project.date).toLocaleDateString('en-PH', {
-		year: 'numeric',
-		month: 'short',
-		day: 'numeric'
-	});
-});
-
+// Import all project files
 await importAllProjectFiles();
 
+// Assign images to projects and add tags to the set
 allProjects.forEach((project) => {
-	const image = allImages.find((image) => image.slug === project.slug);
+	// Find the corresponding image
+	const image = allImages.find((img) => img.slug === project.slug);
 	if (image) project.image = image.path;
 
-	for (const tag of project.tags) {
-		allTags = allTags.add(tag);
-	}
-
-	project.date = new Date(project.date).toLocaleDateString('en-PH', {
-		year: 'numeric',
-		month: 'short',
-		day: 'numeric'
-	});
+	// Add project tags to the global tag set
+	project.tags.forEach((tag) => allTags.add(tag));
 });
 
-const sortedProjects = allProjects.sort((a, b) => {
-	return new Date(b.date).getTime() - new Date(a.date).getTime();
-});
+// Sort projects by date
+const sortedProjects = allProjects.sort(
+	(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
 
+// Sort tags alphabetically
 const sortedTags = [...allTags].sort();
 
+// Export sorted projects and tags
 export const projects = sortedProjects;
 export const tags = sortedTags;

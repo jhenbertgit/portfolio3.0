@@ -1,11 +1,13 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { name } from '../../../../.data/site';
-	import '../../../css/markdown.css';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { isDarkMode } from '$lib/store';
 	import { backDark, backLight, linkDark, linkLight } from '$lib/img';
+
+	import type { PageData } from './$types';
+
+	import '../../../css/markdown.css';
 
 	export let data: PageData;
 
@@ -18,8 +20,8 @@
 </script>
 
 <svelte:head>
-	<title>{name} | {project?.title}</title>
-	<meta name="description" content={project?.description} />
+	<title>{name} | {project.title}</title>
+	<meta name="description" content={project.description} />
 </svelte:head>
 
 <div class="w-full h-full flex flex-col">
@@ -35,16 +37,16 @@
 				{project?.title}
 			</h1>
 			<p class="py-4 text-gray-500">
-				{project?.description}
+				{project.description}
 			</p>
-			{#if project?.githubURL}
+			{#if project.githubURL}
 				<a href={project.githubURL} class="flex text-blue-600 hover:underline">
 					<img src={$isDarkMode ? linkDark : linkLight} alt="" class="mr-2" />
 					{project.githubURL}
 				</a>
 			{/if}
 
-			{#if project?.liveURL}
+			{#if project.liveURL}
 				<a href={project.liveURL} class="flex text-blue-600 hover:underline">
 					<img src={$isDarkMode ? linkDark : linkLight} alt="" class="mr-2" />
 					{project.liveURL}
@@ -56,7 +58,7 @@
 	{#if mounted}
 		<div id="content" class="py-12" transition:fly={{ y: 100, delay: 1000 }}>
 			<div class="max-w-screen-md mx-auto p-5 markdown">
-				{@html project?.body}
+				{@html project.body}
 			</div>
 			<div
 				class="max-w-screen-md mx-auto p-5 flex flex-col gap-2 border-t border-zinc-200 dark:border-zinc-700"

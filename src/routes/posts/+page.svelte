@@ -1,11 +1,12 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { name } from '../../../.data/site';
 	import { heading, subheading } from '../../../.data/posts';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { isDarkMode } from '$lib/store';
 	import { checkedDark, checkedLight, uncheckedDark, uncheckedLight } from '$lib/img';
+
+	import type { PageData } from './$types';
 
 	export let data: PageData;
 	let { posts, tags } = data;

@@ -1,70 +1,38 @@
-import { basename, dirname } from 'path';
-interface Post {
-	slug: string;
-	body: string;
-	date: string;
-	tags: string[];
-	title: string;
-	description: string;
-}
+import { processPostMarkdownFile } from '$lib';
 
-interface MarkdownFile {
-	metadata: object;
-	default: {
-		render: () => {
-			html: string;
-		};
-	};
-}
+const allTags: Set<string> = new Set<string>();
 
 let allPosts: Post[] = [];
-let allTags: Set<string> = new Set<string>();
 
+// Function to import all post files dynamically
 const importAllPostFiles = async () => {
 	const imports = import.meta.glob('/.data/posts/**/post.md');
 	const files = Object.entries(imports);
 
-	await Promise.all(
-		files.map(async ([filepath, module]) => {
-			filepath.split('.').pop();
-
-			const slug = basename(dirname(filepath));
-			const file = (await module()) as MarkdownFile;
-			const body = file.default.render().html;
-			const metadata = file.metadata;
-
-			const post = {
-				slug,
-				body,
-				...metadata
-			} as Post;
-
-			if (!post.tags) post.tags = [];
-
-			allPosts = [...allPosts, post];
-		})
+	const postList = await Promise.all(
+		files.map(([filepath, module]) => processPostMarkdownFile(filepath, module))
 	);
+
+	// Update global arrays with new posts
+	allPosts = [...allPosts, ...postList];
+
+	// Collect tags from all posts
+	postList.forEach((post) => {
+		post.tags.forEach((tag) => allTags.add(tag));
+	});
 };
 
+// Call the import function
 await importAllPostFiles();
 
-allPosts.forEach((post) => {
-	for (const tag of post.tags) {
-		allTags = allTags.add(tag);
-	}
-
-	post.date = new Date(post.date).toLocaleDateString('en-US', {
-		year: 'numeric',
-		month: 'short',
-		day: 'numeric'
-	});
-});
-
+// Sort posts by date
 const sortedPosts = allPosts.sort((a, b) => {
 	return new Date(b.date).getTime() - new Date(a.date).getTime();
 });
 
+// Sort tags alphabetically
 const sortedTags = [...allTags].sort();
 
+// Export sorted posts and tags
 export const posts = sortedPosts;
 export const tags = sortedTags;

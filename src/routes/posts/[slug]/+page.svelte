@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { name } from '../../../../.data/site.js';
 	import { isDarkMode } from '$lib/store';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { backDark, backLight } from '$lib/img';
+
+	import type { PageData } from './$types';
 
 	export let data: PageData;
 
@@ -17,8 +18,8 @@
 </script>
 
 <svelte:head>
-	<title>{name} | {post?.title}</title>
-	<meta name="description" content={post?.description} />
+	<title>{name} | {post.title}</title>
+	<meta name="description" content={post.description} />
 </svelte:head>
 
 <div class="w-full h-full flex flex-col">
@@ -31,17 +32,17 @@
 				<img src={$isDarkMode ? backDark : backLight} class="mr-1" alt="" />Back to Blog
 			</a>
 			<h1 class="text-4xl font-bold mt-8 text-black dark:text-white">
-				{post?.title}
+				{post.title}
 			</h1>
 			<p class="py-4 text-gray-500">
-				{post?.description}
+				{post.description}
 			</p>
 		</div>
 	</div>
 	{#if mounted}
 		<div id="content" class="py-12" transition:fly={{ y: 100, delay: 1000 }}>
 			<div class="max-w-screen-md mx-auto p-5 markdown">
-				{@html post?.body}
+				{@html post.body}
 			</div>
 			<div
 				class="max-w-screen-md mx-auto p-5 flex flex-col gap-2 border-t border-zinc-200 dark:border-zinc-700"
